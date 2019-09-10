@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const db = require("../../models")
 const bcrypt = require("bcrypt");
+const passport = require("../../middleware/passport");
 
 router.get("/", (req, res) => {
   db.User.find()
@@ -13,9 +14,8 @@ router.get("/", (req, res) => {
     })
 })
 
-router.post("/login", (req, res) => {
-  // login router
-  res.json({ loginRoute: true })
+router.post("/login", passport.authenticate("local"), (req, res) => {
+  res.status(200).json({ success: true })
 })
 
 router.post("/signup", (req, res) => {

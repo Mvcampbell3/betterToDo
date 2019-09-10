@@ -4,6 +4,8 @@ const PORT = process.env.PORT || 3001;
 const exphbs = require("express-handlebars");
 const mongoose = require("mongoose");
 const routes = require("./routes");
+const passport = require("./middleware/passport");
+const session = require("express-session");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -18,6 +20,10 @@ app.engine("handlebars", exphbs({
 app.set("view engine", "handlebars");
 
 app.use(express.static("public"));
+
+app.use(session({ secret: "secretgoeshere", resave: true, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(routes)
 

@@ -14,9 +14,17 @@ logBtn.addEventListener("click", function(e) {
       .then(result => {
         console.log(result);
         // redirect to members page on result.success
+        if (result.success) {
+          window.location.replace("/members");
+        }
       }).catch(err => {
         console.log(err);
+        console.log(err.responseText)
         // display to user err
+        if (err.responseText === "Unauthorized") {
+          alert("Email and/or password is incorrect")
+
+        }
       })
   }
 })
