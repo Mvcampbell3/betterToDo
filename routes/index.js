@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const api_routes = require("./api-routes");
 const db = require("../models");
+const checkAuth = require("../middleware/checkAuth");
 
 router.use("/api", api_routes);
 
@@ -23,7 +24,7 @@ router.get("/signup", (req, res) => {
   res.render("signup")
 })
 
-router.get("/members", (req, res) => {
+router.get("/members", checkAuth, (req, res) => {
   res.render("members")
 })
 
