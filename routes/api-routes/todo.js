@@ -1,14 +1,14 @@
 const router = require("express").Router();
-const db = require("../../models")
+const db = require("../../models");
 
 router.get("/", (req, res) => {
-  db.User.find()
-    .then(users => {
-      res.status(200).json(users)
+  db.Todo.find()
+    .then(todos => {
+      res.status(200).json(todos)
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json({err})
+      res.status(500).json({ err })
     })
 })
 
