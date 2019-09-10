@@ -15,7 +15,7 @@ passport.use(new LocalStrategy({ usernameField: "email" }, function(email, passw
         return done(null, false, { msg: "Password is incorrect" })
       }
 
-      return done(null, { email: user.email, username: user.username, id: user._id, todos: user.todos })
+      return done(null, { email: user.email, username: user.username, id: user._id, todos: user.todos, projects: user.projects })
     })
 }))
 

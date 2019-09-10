@@ -1,0 +1,28 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="/">Better To Do</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav mr-auto">
+      {{#unless username}}
+      <li class="nav-item">
+        <a class="nav-link" href="/login">Login</a>
+      </li>
+      {{/unless}}
+
+      {{#if username}}
+      <li class="nav-item">
+        <a class="nav-link" href="/members">Members</a>
+      </li>
+
+      <li class="nav-item">
+        <a href="/api/user/logout" class="nav-link">Logout</a>
+      </li>
+      {{/if}}
+    </ul>
+    <span class="navbar-text">
+      A better way to do
+    </span>
+  </div>
+</nav>

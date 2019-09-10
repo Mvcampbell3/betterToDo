@@ -6,7 +6,7 @@ const checkAuth = require("../middleware/checkAuth");
 router.use("/api", api_routes);
 
 router.get("/", (req, res) => {
-  res.render("home")
+  res.render("home", req.user)
 })
 
 router.get("/login", (req, res) => {
@@ -25,7 +25,7 @@ router.get("/signup", (req, res) => {
 })
 
 router.get("/members", checkAuth, (req, res) => {
-  res.render("members")
+  res.render("members", req.user)
 })
 
 module.exports = router;

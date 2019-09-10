@@ -27,6 +27,11 @@ const UserSchema = new mongoose.Schema({
     type: [mongoose.Schema.Types.ObjectID],
     ref: "Todo",
     default: []
+  },
+
+  projects: {
+    type: Array, 
+    default: []
   }
 
 })
@@ -34,8 +39,6 @@ const UserSchema = new mongoose.Schema({
 const User = mongoose.model("User", UserSchema);
 
 User.prototype.validatePassword = function(password) {
-  console.log(password, this.password)
-  console.log(bcrypt.compareSync(password, this.password));
   return bcrypt.compareSync(password, this.password);
 }
 

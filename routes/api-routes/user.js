@@ -52,4 +52,20 @@ router.post("/signup", (req, res) => {
     })
 })
 
+router.get("/logout", (req, res) => {
+  req.logout();
+  res.redirect("/")
+})
+
+router.get("/drop", (req, res) => {
+  db.User.remove()
+    .then(result => {
+      console.log(result);
+      res.status(200).json(result)
+    })
+    .catch(err => {
+      res.status(400).json(err)
+    })
+})
+
 module.exports = router;
