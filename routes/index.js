@@ -25,6 +25,7 @@ router.get("/signup", (req, res) => {
 })
 
 router.get("/members", checkAuth, (req, res) => {
+  console.log(req.user.projects)
   res.render("members", req.user)
 })
 

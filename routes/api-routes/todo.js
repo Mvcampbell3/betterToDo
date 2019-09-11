@@ -13,6 +13,15 @@ router.get("/", (req, res) => {
     })
 })
 
+router.get("/gettodos", checkAuth, (req, res) => {
+  db.User.findById(req.user.id)
+    .then(user => res.status(200).json({ todos: user.todos, projects: user.projects }))
+    .catch(err => {
+      console.log(err);
+      res.status(400).json(err)
+    })
+})
+
 router.post("/addProject", checkAuth, (req, res) => {
   db.User.findByIdAndUpdate(req.user.id, { $push: { projects: req.body.project } })
     .then(result => {
