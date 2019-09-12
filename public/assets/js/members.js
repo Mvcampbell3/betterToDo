@@ -25,6 +25,7 @@ function getProjects() {
     .then(result => {
       console.log(result);
       // run html creation based on result
+      // Need to make the that data carries todo info, not todo id
       projectsToPage(result)
     })
     .catch(err => console.log(err))
@@ -46,7 +47,7 @@ function projectsToPage(userInfo) {
 
     const newProjectCard = document.createElement("div");
     newProjectCard.classList = "col-sm-10 m-auto card p-3"
-    
+
     const newTitle = document.createElement("h4");
     newTitle.textContent = project;
     newTitle.classList = "text-center";
@@ -58,6 +59,7 @@ function projectsToPage(userInfo) {
     newTodoInput.classList = "form-control";
     newTodoInput.setAttribute("name", "todo")
     newTodoInput.setAttribute("placeholder", "Add Todo...");
+    newTodoInput.setAttribute("data-project", project)
 
     const newInlineInput = document.createElement("div");
     newInlineInput.classList = "input-group-append";
@@ -65,15 +67,61 @@ function projectsToPage(userInfo) {
     const newTodoSubmit = document.createElement("button");
     newTodoSubmit.classList = "btn btn-info";
     newTodoSubmit.textContent = "+";
+    newTodoSubmit.addEventListener("click", createTodo)
+    // Need to add submit functionality
 
     newInlineInput.append(newTodoSubmit);
 
+    const newTodoPlace = document.createElement("div");
+
+
+    // Todo div and todos below
+    const todoProject = todos.filter(todo => todo.project === project);
+    todoProject.forEach(one => {
+      const newTodo = document.createElement("div");
+      newTodo.classList = "card";
+
+      const newTodoTask = document.createElement("p");
+      newTodoTask.classList = "card-text";
+
+      const newTodoChangeComplete = document.createElement("button");
+      newTodoChangeComplete.classList = "btn btn-warning";
+      newTodoChangeComplete.textContent = todo.isCompleted ? "Undo" : "Do";
+
+      const newDelTodo = document.createElement("button");
+      newDelTodo.classList = "btn btn-danger";
+      newDelTodo.textContent = "x";
+
+      newTodo.append(newTodoChangeComplete, newTodoTask, newDelTodo);
+      newTodoPlace.append(newTodo);
+    })
+
     newInput.append(newTodoInput, newInlineInput);
-    newProjectCard.append(newTitle, newInput)
+    newProjectCard.append(newTitle, newInput, newTodoPlace);
     newProjectRow.append(newProjectCard)
     newProjectCol.append(newProjectRow);
     outputArea.append(newProjectCol);
-  }) 
+  })
+}
+
+function createTodo(e) {
+  e.preventDefault();
+  console.log(this.parentElement.previousSibling.value.trim())
+  const inputTask = this.parentElement.previousSibling;
+  const newTask = inputTask.value.trim()
+  const project = inputTask.dataset.project;
+  console.log({ task: newTask, project: project })
+
+  if (newTask && project) {
+    $.ajax("/api/todo/addTodo", { method: "POST", data: { task: newTask, project: project } })
+      .then(result => {
+        console.log(result);
+        getProjects();
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
 }
 
 getProjects();

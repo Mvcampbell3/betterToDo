@@ -34,4 +34,24 @@ router.post("/addProject", checkAuth, (req, res) => {
     })
 })
 
+router.post("/addTodo", checkAuth, (req, res) => {
+  const { project, task } = req.body;
+  const userID = req.user.id;
+
+  const newTodo = new db.Todo({
+    project,
+    task,
+    userID
+  })
+
+  newTodo.save()
+    .then(result => {
+      console.log(result);
+      res.status(201).json(result)
+    })
+    .catch(err => {
+      res.status(400).json(err)
+    })
+})
+
 module.exports = router;
