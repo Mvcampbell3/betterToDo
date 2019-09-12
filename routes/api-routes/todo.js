@@ -28,7 +28,7 @@ router.get("/gettodos", checkAuth, (req, res) => {
 })
 
 router.post("/addProject", checkAuth, (req, res) => {
-  db.User.findByIdAndUpdate(req.user.id, { $push: { projects: req.body.project } })
+  db.User.findByIdAndUpdate(req.user.id, { $push: { projects: { name: req.body.project, hide: false } } })
     .then(result => {
       console.log(result);
       res.status(201).json({ success: true })

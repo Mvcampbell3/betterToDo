@@ -29,11 +29,13 @@ const TodoSchema = new mongoose.Schema({
   }
 })
 
-TodoSchema.pre("save", function() {
+TodoSchema.pre("save", function(next) {
   console.log(this.userID);
   User.findByIdAndUpdate(this.userID, { $push: { todos: this._id } })
+    .exec()
     .then(result => {
       console.log(result);
+      next();
     })
     .catch(err => console.log(err))
 })

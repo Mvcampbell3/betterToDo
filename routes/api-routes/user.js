@@ -68,4 +68,15 @@ router.get("/drop", (req, res) => {
     })
 })
 
+router.put("/hideproject", (req, res) => {
+  const { projectName, hide } = req.body;
+  db.User.update({ _id: req.user.id, "projects.name": projectName }, { "$set": { "projects.$.hide": hide } }, (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.json(err)
+    }
+    res.status(200).json(result)
+  })
+})
+
 module.exports = router;

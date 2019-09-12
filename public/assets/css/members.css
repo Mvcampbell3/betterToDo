@@ -44,3 +44,31 @@
 .taskDelBtn:active{
   transform: scale(0.9)
 }
+
+.newProjectTop{
+  display: grid;
+  grid-template-columns: 25px auto 25px;
+  column-gap: 3px;
+  align-items: flex-start;
+}
+
+.hideBtn{
+  background-color: dodgerblue;
+  border: 1px black solid;
+  color: white;
+  width: 25px;
+  height: 25px;
+}
+
+.delProjectBtn{
+  background-color: red;
+  width: 25px;
+  height: 25px;
+  border: 1px black solid;
+  border-radius: 50%;
+  color: white;
+}
+
+.delProjectBtn:focus{
+  outline: none;
+}

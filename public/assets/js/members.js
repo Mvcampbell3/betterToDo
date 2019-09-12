@@ -39,17 +39,38 @@ function projectsToPage(userInfo) {
 
   // Create Divs for projects
   projects.forEach(project => {
+    console.log(project.name, project.hide)
     const newProjectCol = document.createElement("div");
     newProjectCol.classList = "col-lg-4 col-md-6 col-sm-12 newProject p-4 mb-2";
 
     const newProjectRow = document.createElement("row");
     newProjectRow.classList = "row";
 
+    const newProjectTop = document.createElement("div");
+    newProjectTop.classList = "newProjectTop";
+
+    const newProjectHide = document.createElement("button");
+    newProjectHide.classList = "hideBtn";
+    newProjectHide.innerHTML = project.hide === "true" ? "&#8744" : "&#8743";
+    newProjectHide.setAttribute("data-hidden", project.hide);
+    newProjectHide.setAttribute("data-project", project.name);
+    newProjectHide.addEventListener("click", toggleHide)
+
+    const newProjectDel = document.createElement("button");
+    newProjectDel.classList = "delProjectBtn";
+    newProjectDel.innerHTML = "&#215"
+    newProjectDel.setAttribute("data-project", project.name);
+    newProjectDel.addEventListener("click", deleteProject);
+
+    const newProjectBottom = document.createElement("div");
+    newProjectBottom.classList = "newProjectBottom";
+    newProjectBottom.style.display = project.hide === "true" ? "none" : "block";
+
     const newProjectCard = document.createElement("div");
     newProjectCard.classList = "col-sm-10 m-auto card p-3"
 
     const newTitle = document.createElement("h4");
-    newTitle.textContent = project;
+    newTitle.textContent = project.name;
     newTitle.classList = "text-center";
 
     const newInput = document.createElement("div");
@@ -59,7 +80,7 @@ function projectsToPage(userInfo) {
     newTodoInput.classList = "form-control";
     newTodoInput.setAttribute("name", "todo")
     newTodoInput.setAttribute("placeholder", "Add Todo...");
-    newTodoInput.setAttribute("data-project", project)
+    newTodoInput.setAttribute("data-project", project.name)
 
     const newInlineInput = document.createElement("div");
     newInlineInput.classList = "input-group-append";
@@ -76,7 +97,7 @@ function projectsToPage(userInfo) {
 
 
     // Todo div and todos below
-    const todoProject = todos.filter(todo => todo.project === project);
+    const todoProject = todos.filter(todo => todo.project === project.name);
     todoProject.forEach(todo => {
 
       const newTodo = document.createElement("div");
@@ -120,7 +141,10 @@ function projectsToPage(userInfo) {
     })
 
     newInput.append(newTodoInput, newInlineInput);
-    newProjectCard.append(newTitle, newInput, newTodoPlace);
+    newProjectTop.append(newProjectHide, newTitle, newProjectDel);
+    newProjectBottom.append(newInput, newTodoPlace);
+    newProjectCard.append(newProjectTop, newProjectBottom);
+
     newProjectRow.append(newProjectCard)
     newProjectCol.append(newProjectRow);
     outputArea.append(newProjectCol);
@@ -149,14 +173,45 @@ function createTodo(e) {
 
 function removeTodo() {
   const todoID = this.dataset.todo_id;
-  $.ajax(`/api/todo/delete/${todoID}`, {method: "DELETE"})
+  $.ajax(`/api/todo/delete/${todoID}`, { method: "DELETE" })
     .then(result => {
       console.log(result);
+      setTimeout(() => {
+        getProjects();
+      }, 250)
       getProjects();
     })
     .catch(err => {
       console.log(err);
     })
+}
+
+function toggleHide() {
+  if (this.dataset.hidden === "false") {
+    $(this.parentElement.nextSibling).slideUp();
+    this.innerHTML = "&#8744"
+    this.dataset.hidden = "true"
+    updateHideDB(this.dataset.project, true)
+  } else {
+    $(this.parentElement.nextSibling).slideDown();
+    this.innerHTML = "&#8743";
+    this.dataset.hidden = "false";
+    updateHideDB(this.dataset.project, false)
+  }
+}
+
+function updateHideDB(projectName, hide) {
+  $.ajax("/api/user/hideproject", { method: "PUT", data: { projectName, hide } })
+    .then(result => {
+      console.log(result);
+    })
+    .catch(err => {
+      console.log(err)
+    })
+}
+
+function deleteProject() {
+  console.log(this.dataset.project)
 }
 
 getProjects();
