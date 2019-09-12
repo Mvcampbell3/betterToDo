@@ -13,33 +13,18 @@ router.get("/", (req, res) => {
     })
 })
 
-router.get("/gettodos", (req, res) => {
-  if (!req.user) {
-    const testID = '5d782228f39d6a00fc4f36f0'
-    db.User.findById(testID)
-      .populate("Todo")
-      .then(result => {
-        console.log(result);
-        res.status(201).json(result)
-      })
-      .catch(err => {
-        console.log(err);
-        res.json(200).json(err)
-      })
-  } else {
-    db.User.findById(req.user.id)
-      .populate("todos")
-      .then(result => {
-        console.log(result);
-        res.status(201).json(result)
-      })
-      .catch(err => {
-        console.log(err);
-        res.json(200).json(err)
-      })
-  }
+router.get("/gettodos", checkAuth, (req, res) => {
 
-
+  db.User.findById(req.user.id)
+    .populate("todos")
+    .then(result => {
+      console.log(result);
+      res.status(201).json(result)
+    })
+    .catch(err => {
+      console.log(err);
+      res.json(200).json(err)
+    })
 })
 
 router.post("/addProject", checkAuth, (req, res) => {
@@ -78,6 +63,27 @@ router.get("/drop", (req, res) => {
   db.Todo.remove()
     .then(result => res.json(result))
     .catch(err => res.json(err))
+})
+
+router.delete("/delete/:id", (req, res) => {
+  db.Todo.findById(req.params.id)
+    .then(todo => {
+      if (todo.userID.toString() === req.user.id) {
+        todo.remove()
+          .then(deleted => {
+            res.status(200).json({ deleted })
+          })
+          .catch(err => {
+            res.status(400).json({ msg: err })
+          })
+      } else {
+        res.status(200).json({ msg: "Would not Delete, unauthed" })
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(400).json(err);
+    })
 })
 
 module.exports = router;

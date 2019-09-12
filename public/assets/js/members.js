@@ -68,7 +68,6 @@ function projectsToPage(userInfo) {
     newTodoSubmit.classList = "btn btn-info";
     newTodoSubmit.textContent = "+";
     newTodoSubmit.addEventListener("click", createTodo)
-    // Need to add submit functionality
 
     newInlineInput.append(newTodoSubmit);
 
@@ -78,7 +77,7 @@ function projectsToPage(userInfo) {
 
     // Todo div and todos below
     const todoProject = todos.filter(todo => todo.project === project);
-    todoProject.forEach(one => {
+    todoProject.forEach(todo => {
 
       const newTodo = document.createElement("div");
       newTodo.classList = "myGrid";
@@ -98,15 +97,19 @@ function projectsToPage(userInfo) {
 
       const newTodoTask = document.createElement("p");
       newTodoTask.classList = "card-text";
-      newTodoTask.textContent = one.task;
+      newTodoTask.textContent = todo.task;
 
       const newTodoChangeComplete = document.createElement("button");
       newTodoChangeComplete.classList = "changeCompleteBtn";
-      newTodoChangeComplete.innerHTML = one.isCompleted ? "&#8592" : "&#10003";
+      newTodoChangeComplete.innerHTML = todo.isCompleted ? "&#8592" : "&#10003";
+      // Update todo completed based on click
 
       const newDelTodo = document.createElement("button");
       newDelTodo.classList = "taskDelBtn";
       newDelTodo.innerHTML = "&times";
+      newDelTodo.setAttribute("data-todo_id", todo._id);
+      newDelTodo.addEventListener("click", removeTodo)
+      // Delete todo on click
 
       newTodoFirst.append(newTodoChangeComplete);
       newTodoSecond.append(newTodoTask);
@@ -142,6 +145,18 @@ function createTodo(e) {
         console.log(err);
       })
   }
+}
+
+function removeTodo() {
+  const todoID = this.dataset.todo_id;
+  $.ajax(`/api/todo/delete/${todoID}`, {method: "DELETE"})
+    .then(result => {
+      console.log(result);
+      getProjects();
+    })
+    .catch(err => {
+      console.log(err);
+    })
 }
 
 getProjects();
