@@ -19,18 +19,14 @@ const UserSchema = new mongoose.Schema({
   },
 
   date: {
-    type: Date, 
+    type: Date,
     default: Date.now
   },
 
-  todos: {
-    type: [mongoose.Schema.Types.ObjectID],
-    ref: "Todo",
-    default: []
-  },
+  todos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Todo", default: [] }],
 
   projects: {
-    type: Array, 
+    type: Array,
     default: []
   }
 

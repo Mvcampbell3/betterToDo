@@ -73,26 +73,46 @@ function projectsToPage(userInfo) {
     newInlineInput.append(newTodoSubmit);
 
     const newTodoPlace = document.createElement("div");
+    newTodoPlace.classList = "newTodoPlace"
 
 
     // Todo div and todos below
     const todoProject = todos.filter(todo => todo.project === project);
     todoProject.forEach(one => {
+
       const newTodo = document.createElement("div");
-      newTodo.classList = "card";
+      newTodo.classList = "myGrid";
+
+      // Put change btn here
+      const newTodoFirst = document.createElement("div");
+      newTodoFirst.classList = "first";
+
+      // Put task here
+      const newTodoSecond = document.createElement("div");
+      newTodoSecond.classList = "second";
+
+      // Put del btn here
+      const newTodoThird = document.createElement("div");
+      newTodoThird.classList = "third";
+
 
       const newTodoTask = document.createElement("p");
       newTodoTask.classList = "card-text";
+      newTodoTask.textContent = one.task;
 
       const newTodoChangeComplete = document.createElement("button");
-      newTodoChangeComplete.classList = "btn btn-warning";
-      newTodoChangeComplete.textContent = todo.isCompleted ? "Undo" : "Do";
+      newTodoChangeComplete.classList = "changeCompleteBtn";
+      newTodoChangeComplete.innerHTML = one.isCompleted ? "&#8592" : "&#10003";
 
       const newDelTodo = document.createElement("button");
-      newDelTodo.classList = "btn btn-danger";
-      newDelTodo.textContent = "x";
+      newDelTodo.classList = "taskDelBtn";
+      newDelTodo.innerHTML = "&times";
 
-      newTodo.append(newTodoChangeComplete, newTodoTask, newDelTodo);
+      newTodoFirst.append(newTodoChangeComplete);
+      newTodoSecond.append(newTodoTask);
+      newTodoThird.append(newDelTodo);
+
+      newTodo.append(newTodoFirst, newTodoSecond, newTodoThird);
       newTodoPlace.append(newTodo);
     })
 

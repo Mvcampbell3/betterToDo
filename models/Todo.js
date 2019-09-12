@@ -24,7 +24,7 @@ const TodoSchema = new mongoose.Schema({
 
   userID: {
     type: mongoose.Schema.Types.ObjectID,
-    ref: User,
+    ref: "User",
     requried: true
   }
 })
