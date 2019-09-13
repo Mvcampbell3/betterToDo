@@ -156,9 +156,51 @@ function createTodo(e) {
   const project = inputTask.dataset.project;
 
   if (newTask && project) {
+    inputTask.value = "";
     $.ajax("/api/todo/addTodo", { method: "POST", data: { task: newTask, project: project } })
       .then(result => {
-        getProjects();
+        // try and animate it into existence?
+        console.log(result);
+        console.log(this.parentElement.parentElement.parentElement)
+        const projectBottom = this.parentElement.parentElement.parentElement;
+        const newTodo = document.createElement("div");
+        newTodo.classList = "myGrid newTodo";
+
+        const firstSection = document.createElement("div");
+        const secondSection = document.createElement("div");
+        const thirdSection = document.createElement("div");
+
+        const newTodoChangeComplete = document.createElement("button");
+        newTodoChangeComplete.classList = "changeCompleteBtn notComplete";
+        newTodoChangeComplete.innerHTML = "&#10003";
+
+        const newTodoTask = document.createElement("p");
+        newTodoTask.classList = "card-text text-dark";
+        newTodoTask.textContent = result.task;
+
+        const newDelTodo = document.createElement("button");
+        newDelTodo.classList = "taskDelBtn";
+        newDelTodo.innerHTML = "&times";
+
+        firstSection.append(newTodoChangeComplete);
+        secondSection.append(newTodoTask);
+        thirdSection.append(newDelTodo);
+
+        newTodo.append(firstSection, secondSection, thirdSection);
+        projectBottom.append(newTodo)
+
+        let createTodo = newTodo.animate({
+          transform: ["scaleY(0) rotateZ(45deg)", "scaleY(1) rotateZ(0deg)"],
+          opacity: ["0", 1]
+        }, {
+          duration: 500,
+          fill: "forwards"
+        })
+
+        createTodo.onfinish = function() {
+          getProjects();
+        }
+        // getProjects();
       })
       .catch(err => {
         console.log(err);
@@ -167,10 +209,28 @@ function createTodo(e) {
 }
 
 function removeTodo() {
+  const elemAnimate = this.parentElement.parentElement;
+  console.log(elemAnimate);
+  elemAnimate.style.overflow = "hidden";
+  console.log(elemAnimate.scrollHeight);
   const todoID = this.dataset.todo_id;
   $.ajax(`/api/todo/delete/${todoID}`, { method: "DELETE" })
     .then(result => {
-      getProjects();
+      console.log(result)
+      let destroy = elemAnimate.animate({
+        height: [elemAnimate.scrollHeight + "px", "0px"],
+        marginBottom: ["1em", "0"],
+        opacity: ["1", "0"],
+        transform: ["rotateZ(0deg)", "rotateZ(-15deg)", "rotateZ(0deg)"]
+      }, {
+        duration: 500,
+        fill: "forwards"
+      })
+
+      destroy.onfinish = function() {
+        getProjects();
+      }
+      // getProjects();
     })
     .catch(err => {
       console.log(err);

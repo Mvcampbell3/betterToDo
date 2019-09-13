@@ -71,7 +71,7 @@ router.delete("/delete/:id", (req, res) => {
       if (todo.userID.toString() === req.user.id) {
         todo.remove()
           .then(deleted => {
-            res.status(200).json({ deleted })
+            res.status(200).json({ deleted, ok: true })
           })
           .catch(err => {
             res.status(400).json({ msg: err })
@@ -85,6 +85,10 @@ router.delete("/delete/:id", (req, res) => {
       res.status(400).json(err);
     })
 })
+
+// router.delete("/delete/:id", (req, res) => {
+//   res.json({ ok: true })
+// })
 
 router.put("/updatecompleted", (req, res) => {
   let { todoID, completed } = req.body;
