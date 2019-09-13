@@ -117,12 +117,15 @@ function projectsToPage(userInfo) {
 
 
       const newTodoTask = document.createElement("p");
-      newTodoTask.classList = "card-text";
+      newTodoTask.classList = todo.isCompleted ? "card-text strike-through" : "card-text";
       newTodoTask.textContent = todo.task;
 
       const newTodoChangeComplete = document.createElement("button");
-      newTodoChangeComplete.classList = "changeCompleteBtn";
-      newTodoChangeComplete.innerHTML = todo.isCompleted ? "&#8592" : "&#10003";
+      newTodoChangeComplete.classList = todo.isCompleted ? "changeCompleteBtn complete" : "changeCompleteBtn notComplete";
+      newTodoChangeComplete.innerHTML = todo.isCompleted ? "&laquo" : "&#10003";
+      newTodoChangeComplete.setAttribute("data-todo_id", todo._id);
+      newTodoChangeComplete.setAttribute("data-completed", todo.isCompleted);
+      newTodoChangeComplete.addEventListener("click", updateCompleted)
       // Update todo completed based on click
 
       const newDelTodo = document.createElement("button");
@@ -212,6 +215,18 @@ function updateHideDB(projectName, hide) {
 
 function deleteProject() {
   console.log(this.dataset.project)
+}
+
+function updateCompleted() {
+  const todoID = this.dataset.todo_id;
+  const completed = this.dataset.completed;
+
+  $.ajax("/api/todo/updatecompleted", { method: "PUT", data: { todoID, completed } })
+    .then(result => {
+      console.log(result);
+      getProjects();
+    })
+    .catch(err => console.log(err));
 }
 
 getProjects();

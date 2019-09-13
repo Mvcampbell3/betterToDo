@@ -86,4 +86,23 @@ router.delete("/delete/:id", (req, res) => {
     })
 })
 
+router.put("/updatecompleted", (req, res) => {
+  let { todoID, completed } = req.body;
+  console.log(typeof completed);
+  if (completed === "false") {
+    completed = false
+  } else {
+    completed = true
+  }
+  db.Todo.findByIdAndUpdate(todoID, { isCompleted: !completed }, { new: true })
+    .then(result => {
+      console.log(result);
+      res.status(200).json(result);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(400).json(err);
+    })
+})
+
 module.exports = router;

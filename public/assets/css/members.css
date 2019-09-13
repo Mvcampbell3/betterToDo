@@ -18,10 +18,18 @@
 .changeCompleteBtn{
   height: 25px;
   width: 25px;
-  background-color: #333;
-  color: white;
   border: 1px black solid;
   border-radius: 3px;
+}
+
+.complete{
+  background-color: turquoise;
+  color: white;
+}
+
+.notComplete{
+  color: white;
+  background-color: limegreen;
 }
 
 .taskDelBtn{
@@ -71,4 +79,8 @@
 
 .delProjectBtn:focus{
   outline: none;
+}
+
+.strike-through{
+  text-decoration: line-through;
 }
