@@ -79,4 +79,40 @@ router.put("/hideproject", (req, res) => {
   })
 })
 
+router.put("/deleteproject", (req, res) => {
+  console.log(req.body)
+  const projectName = req.body.projectName;
+  console.log('//////////////////')
+  console.log(projectName)
+  console.log('//////////////////')
+  // None of this is working correctly
+  db.User.findByIdAndUpdate(req.user.id, { $pull: { projects: { name: projectName } } })
+    .then(user => {
+      console.log(user)
+      // res.json(user)
+      let promiseArr = []
+      db.Todo.find({ project: projectName })
+        .then(todos => {
+          todos.forEach(one => promiseArr.push(one.remove()));
+          console.log(promiseArr);
+          Promise.all(promiseArr)
+            .then(done => {
+              console.log(done);
+              res.json({ ok: true })
+            })
+            .catch(err => {
+              console.log(err);
+              res.json(err)
+            })
+        })
+        .catch(err => {
+          console.log(err);
+          res.json(err);
+        })
+    })
+    .catch(err => {
+      res.json(err)
+    })
+})
+
 module.exports = router;

@@ -5,17 +5,15 @@ function addProject() {
   const projectPlace = document.getElementById("project");
   const project = projectPlace.value.trim();
 
-  console.log(project);
-
   if (project) {
     $.ajax("/api/todo/addProject", { method: "POST", data: { project: project } })
       .then(result => {
-        console.log(result);
         // Run projects to page
+        projectPlace.value = "";
         getProjects();
       })
       .catch(err => {
-        console.log(err);
+        console.log(err)
       })
   }
 }
@@ -23,7 +21,6 @@ function addProject() {
 function getProjects() {
   $.ajax("/api/todo/gettodos", { method: "GET" })
     .then(result => {
-      console.log(result);
       // run html creation based on result
       // Need to make the that data carries todo info, not todo id
       projectsToPage(result)
@@ -35,13 +32,11 @@ function projectsToPage(userInfo) {
   const outputArea = document.getElementById("outputArea");
   outputArea.innerHTML = "";
   const { projects, todos } = userInfo;
-  console.log(projects, todos);
 
   // Create Divs for projects
   projects.forEach(project => {
-    console.log(project.name, project.hide)
     const newProjectCol = document.createElement("div");
-    newProjectCol.classList = "col-lg-4 col-md-6 col-sm-12 newProject p-4 mb-2";
+    newProjectCol.classList = "col-lg-6 col-md-6 col-sm-12 newProject p-4 mb-2";
 
     const newProjectRow = document.createElement("row");
     newProjectRow.classList = "row";
@@ -67,7 +62,7 @@ function projectsToPage(userInfo) {
     newProjectBottom.style.display = project.hide === "true" ? "none" : "block";
 
     const newProjectCard = document.createElement("div");
-    newProjectCard.classList = "col-sm-10 m-auto card p-3"
+    newProjectCard.classList = "col-sm-10 m-auto card p-3 bg-light"
 
     const newTitle = document.createElement("h4");
     newTitle.textContent = project.name;
@@ -117,7 +112,7 @@ function projectsToPage(userInfo) {
 
 
       const newTodoTask = document.createElement("p");
-      newTodoTask.classList = todo.isCompleted ? "card-text strike-through" : "card-text";
+      newTodoTask.classList = todo.isCompleted ? "card-text strike-through text-dark" : "card-text text-dark";
       newTodoTask.textContent = todo.task;
 
       const newTodoChangeComplete = document.createElement("button");
@@ -156,16 +151,13 @@ function projectsToPage(userInfo) {
 
 function createTodo(e) {
   e.preventDefault();
-  console.log(this.parentElement.previousSibling.value.trim())
   const inputTask = this.parentElement.previousSibling;
   const newTask = inputTask.value.trim()
   const project = inputTask.dataset.project;
-  console.log({ task: newTask, project: project })
 
   if (newTask && project) {
     $.ajax("/api/todo/addTodo", { method: "POST", data: { task: newTask, project: project } })
       .then(result => {
-        console.log(result);
         getProjects();
       })
       .catch(err => {
@@ -178,10 +170,6 @@ function removeTodo() {
   const todoID = this.dataset.todo_id;
   $.ajax(`/api/todo/delete/${todoID}`, { method: "DELETE" })
     .then(result => {
-      console.log(result);
-      setTimeout(() => {
-        getProjects();
-      }, 250)
       getProjects();
     })
     .catch(err => {
@@ -206,7 +194,6 @@ function toggleHide() {
 function updateHideDB(projectName, hide) {
   $.ajax("/api/user/hideproject", { method: "PUT", data: { projectName, hide } })
     .then(result => {
-      console.log(result);
     })
     .catch(err => {
       console.log(err)
@@ -214,7 +201,19 @@ function updateHideDB(projectName, hide) {
 }
 
 function deleteProject() {
-  console.log(this.dataset.project)
+  const projectName = this.dataset.project;
+  this.parentElement.parentElement.animate([
+    { opacity: "1" },
+    { opacity: "0" }
+  ], {
+    duration: 2000,
+    fill: "forwards"
+  })
+  $.ajax("/api/user/deleteproject", { method: "PUT", data: { projectName } })
+    .then(result => {
+      getProjects();
+    })
+    .catch(err => console.log(err))
 }
 
 function updateCompleted() {
@@ -223,7 +222,6 @@ function updateCompleted() {
 
   $.ajax("/api/todo/updatecompleted", { method: "PUT", data: { todoID, completed } })
     .then(result => {
-      console.log(result);
       getProjects();
     })
     .catch(err => console.log(err));

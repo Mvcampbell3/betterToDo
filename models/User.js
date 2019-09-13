@@ -26,7 +26,7 @@ const UserSchema = new mongoose.Schema({
   todos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Todo", default: [] }],
 
   projects: {
-    type: Array,
+    type: [Object],
     default: []
   }
 

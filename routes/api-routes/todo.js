@@ -18,7 +18,7 @@ router.get("/gettodos", checkAuth, (req, res) => {
   db.User.findById(req.user.id)
     .populate("todos")
     .then(result => {
-      console.log(result);
+      // console.log(result);
       res.status(201).json(result)
     })
     .catch(err => {

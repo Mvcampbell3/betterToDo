@@ -23,7 +23,7 @@
 }
 
 .complete{
-  background-color: turquoise;
+  background-color: rgb(233, 178, 0);
   color: white;
 }
 
@@ -35,7 +35,7 @@
 .taskDelBtn{
   width: 25px;
   height: 25px;
-  background-color: darkred;
+  background-color: red;
   color: white;
   border-radius: 50%;
   border: 1px black solid;
@@ -46,7 +46,7 @@
 }
 
 .taskDelBtn:hover{
-  background-color: red;
+  background-color: darkred;
 }
 
 .taskDelBtn:active{
@@ -60,12 +60,17 @@
   align-items: flex-start;
 }
 
+.newProjectBottom{
+  margin-top: 10px;
+}
+
 .hideBtn{
   background-color: dodgerblue;
   border: 1px black solid;
   color: white;
   width: 25px;
   height: 25px;
+  margin-top: 4.9px;
 }
 
 .delProjectBtn{
@@ -75,10 +80,15 @@
   border: 1px black solid;
   border-radius: 50%;
   color: white;
+  margin-top: 4.9px;
 }
 
 .delProjectBtn:focus{
   outline: none;
+}
+
+.delProjectBtn:hover{
+  background-color: darkred;
 }
 
 .strike-through{

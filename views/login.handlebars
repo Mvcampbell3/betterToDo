@@ -2,7 +2,7 @@
   <h1 class="text-center">Login</h1>
   <div class="row">
     <div class="col-lg-6 col-md-8 col-sm-10 m-auto">
-      <div class="card p-3">
+      <div class="card p-3 bg-light">
         {{#if msg}}
         <div class="alert alert-success alert-dismissible fade show" role="alert">
           {{msg}}.
@@ -13,15 +13,15 @@
         {{/if}}
         <div class="form">
           <div class="form-group">
-            <label for="email">Email</label>
+            <label for="email" class="text-dark">Email</label>
             <input type="text" name="email" id="email" class="form-control" value={{email}}>
           </div>
           <div class="form-group">
-            <label for="password">Password</label>
+            <label for="password" class="text-dark">Password</label>
             <input type="password" name="password" id="password" class="form-control">
           </div>
-          <button type="submit" class="btn btn-primary mr-3" id="logBtn">Login</button>
-          <a href="/signup">Not a member?</a>
+          <button type="submit" class="btn btn-info mr-3" id="logBtn">Login</button>
+          <a href="/signup" class="text-primary">Not a member?</a>
         </div>
       </div>
     </div>
