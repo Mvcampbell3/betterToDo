@@ -96,18 +96,6 @@
   text-decoration: line-through;
 }
 
-/* .newTodo{
-  transform: scaleY(0);
-  animation-name: inflate;
-  animation-duration: 1s;
-  animation-fill-mode: forwards;
-}
-
-@keyframes inflate{
-  0% {transform:scaleY(0)}
-  100% {transform:scaleY(1)}
-} */
-
 .newTodo{
   transform: scaleY(0) rotateZ(45deg);
   opacity: 0;
