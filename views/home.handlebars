@@ -48,10 +48,7 @@
     })
 
     ani.onfinish = () => {
-      console.log(complete)
       if (complete > 1) {
-        // run function
-        console.log("would run");
         bringUp();
       } else {
         complete++;
@@ -65,11 +62,11 @@
 
     const ani = bring.animate({
       transform: ["translateY(500px)", "translateY(0px)"],
-      opacity: ["0", ".1" , "1"]
+      opacity: ["0", ".1", "1"]
     }, {
       duration: 500,
       fill: "forwards",
-      delay: 500
+      easing: "cubic-bezier(.03, .29, .37, 1.21)"
     })
 
     ani.onfinish = () => {

@@ -5,3 +5,7 @@ body{
 #bring{
   transform: translateY(500px);
 }
+
+.roll{
+  opacity: 0;
+}

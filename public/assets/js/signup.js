@@ -12,17 +12,44 @@ signBtn.addEventListener("click", function(e) {
   const password = passwordPlace.value.trim();
 
   if (email && username && password) {
-    $.ajax("/api/user/signup", {method: "POST", data: {email, username, password}})
+    $.ajax("/api/user/signup", { method: "POST", data: { email, username, password } })
       .then(result => {
-        console.log(result);
         // redirect if result.success === true
         if (result.success) {
           window.location.replace(`/login/success/${result.id}`)
         }
       }).catch(err => {
-        console.log(err.responseJSON.msg);
-        alert(err.responseJSON.msg)
-        // display to user err
+        const errorArray = []
+        console.log(err);
+        const er = err.responseJSON;
+        if (er.msg) {
+          errorArray.push({ msg: er.msg });
+        } else if (er.err.errors.email) {
+          errorArray.push({ msg: er.err.errors.email.message })
+        }
+        addAlert(errorArray)
       })
   }
 })
+
+function addAlert(errors) {
+  if (errors.length === 0) {
+    errors.push({ msg: "Something went wrong" })
+  }
+  errors.forEach(one => {
+    const newAlert = document.createElement("div");
+    newAlert.classList = "alert alert-warning alert-dismissible fade show";
+    newAlert.setAttribute("role", "alert")
+    newAlert.textContent = one.msg;
+
+    const closeAlert = document.createElement("button");
+    closeAlert.classList = "close"
+    closeAlert.setAttribute("data-dismiss", "alert")
+    closeAlert.setAttribute("aria-label", "Close")
+    closeAlert.innerHTML = "<span aria-hidden='true'>&times;</span>"
+
+    newAlert.append(closeAlert);
+    const formAdd = document.getElementById("form");
+    formAdd.prepend(newAlert)
+  })
+}
