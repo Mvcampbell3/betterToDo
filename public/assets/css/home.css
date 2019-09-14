@@ -1,0 +1,7 @@
+body{
+  overflow: hidden;
+}
+
+#bring{
+  transform: translateY(500px);
+}
