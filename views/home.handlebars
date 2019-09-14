@@ -21,6 +21,8 @@
       <h5 class="text-center">it's a better way to do todos</h5>
     </div>
   </div>
+  {{!-- Conditional on No USER --}}
+  {{#unless username}}
   <div class="row mt-3" id="bring">
     <div class="col-md-5 col-sm-12 text-center">
       <a class="display-4 text-white" href="/login">Login</a>
@@ -30,7 +32,19 @@
       <a class="display-4 text-white" href="/signup">Sign Up</a>
     </div>
   </div>
-
+  {{/unless}}
+  {{!-- Conditional on USER --}}
+  {{#if username}}
+  <div class="row mt-3 align-items-center" id="bring">
+    <div class="col-md-5 col-sm-12 text-center">
+      <p class="display-4 text-center">{{username}}</p>
+    </div>
+    <div class="col-md-2 col-sm-12 bg-info p-2"></div>
+    <div class="col-md-5 col-sm-12 text-center">
+      <a class="display-4 text-white" href="/members">To Do List</a>
+    </div>
+  </div>
+  {{/if}}
 </div>
 
 <script>
